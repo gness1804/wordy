@@ -22,16 +22,16 @@ const compute = (firstNum: string, secondNum: string, operation: Operation): num
   }
 }
 
+const isValidOperation = (operation: string): boolean => {
+  return operation === Operation.addition || operation === Operation.subtract || operation === Operation.multiplication || operation === Operation.division
+}
+
 export const answer = (question: string): number => {
   const [, , firstNum, operation, operand, ...rest] = question
     .replaceAll('divided by', 'dividedby') // make this a single word so it's easier to parse
     .replaceAll('multiplied by', 'multipliedby') // make this a single word so it's easier to parse
     .replace('?', '') // remove the trailing ?
     .split(' ');
-
-
-  // if (!firstNum || !operand || isNaN(parseInt(operand, 10))) throw new Error('Syntax error')
-  // if (firstNum && isNaN(parseInt(firstNum, 10))) throw new Error('Unknown operation');
 
   if (!operation) {
     // just a single number
@@ -41,7 +41,9 @@ export const answer = (question: string): number => {
     return num;
   }
 
-  if (operation !== Operation.addition && operation !== Operation.subtract && operation !== Operation.multiplication && operation !== Operation.division) throw new Error('Unknown operation');
+  if (!isNaN(parseInt(operation, 10))) throw new Error('Syntax error')
+
+  if (!isValidOperation(operation)) throw new Error('Unknown operation');
 
   if (!operand) throw new Error('Syntax error')
   if (isNaN(parseInt(operand, 10))) throw new Error('Syntax error')
@@ -55,6 +57,7 @@ export const answer = (question: string): number => {
     const initRes = compute(firstNum, operand, operation as Operation);
     const pairs = rest.reduce((acc, curr, index, array) => {
       if (index % 2 === 0) {
+        if (!isValidOperation(curr)) throw new Error('Syntax error')
         // @ts-ignore
         acc.push(array.slice(index, index + 2));
       }
