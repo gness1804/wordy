@@ -29,13 +29,19 @@ export const answer = (question: string): number => {
     .replace('?', '') // remove the trailing ?
     .split(' ');
 
-  if (isNaN(parseInt(firstNum, 10))) throw new Error('Unknown operation');
+
+    // if (!firstNum || !operand || isNaN(parseInt(operand, 10))) throw new Error('Syntax error')
+    // if (firstNum && isNaN(parseInt(firstNum, 10))) throw new Error('Unknown operation');
 
   if (!operation) {
     // just a single number
-    return parseInt(firstNum, 10);
+    const num = parseInt(firstNum, 10);
+    if (!num) throw new Error('Syntax error')
+    if (isNaN(num)) throw new Error('Unknown operation');
+    return num;
   }
 
+  // assume valid question structure from here on.
   if (!rest.length) {
     // there's only one operation
     return compute(firstNum, operand, operation as Operation)
