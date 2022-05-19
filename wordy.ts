@@ -1,3 +1,10 @@
+enum Operation {
+  addition = 'plus',
+  subtract = 'minus',
+  multiplication = 'multipliedby',
+  division = 'dividedby',
+}
+
 export const answer = (question: string): number => {
   const [, , firstNum, operation, operand, ...rest] = question
     .replaceAll('divided by', 'dividedby') // make this a single word so it's easier to parse
@@ -14,7 +21,14 @@ export const answer = (question: string): number => {
 
   if (!rest.length) {
     // there's only one operation
-
+    const first = parseInt(firstNum, 10);
+    const second = parseInt(operand, 10);
+    switch (operation) {
+      case Operation.addition:
+        return first + second;
+      default:
+        throw new Error('Unknown operation');
+    }
   } else {
     // multiple operations
   }
