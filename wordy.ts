@@ -30,8 +30,8 @@ export const answer = (question: string): number => {
     .split(' ');
 
 
-    // if (!firstNum || !operand || isNaN(parseInt(operand, 10))) throw new Error('Syntax error')
-    // if (firstNum && isNaN(parseInt(firstNum, 10))) throw new Error('Unknown operation');
+  // if (!firstNum || !operand || isNaN(parseInt(operand, 10))) throw new Error('Syntax error')
+  // if (firstNum && isNaN(parseInt(firstNum, 10))) throw new Error('Unknown operation');
 
   if (!operation) {
     // just a single number
@@ -40,6 +40,11 @@ export const answer = (question: string): number => {
     if (isNaN(num)) throw new Error('Unknown operation');
     return num;
   }
+
+  if (operation !== Operation.addition && operation !== Operation.subtract && operation !== Operation.multiplication && operation !== Operation.division) throw new Error('Unknown operation');
+
+  if (!operand) throw new Error('Syntax error')
+  if (isNaN(parseInt(operand, 10))) throw new Error('Syntax error')
 
   // assume valid question structure from here on.
   if (!rest.length) {
