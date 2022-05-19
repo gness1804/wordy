@@ -100,4 +100,9 @@ describe('Wordy', () => {
   it('reject prefix notation', () => {
     expect(() => answer('What is plus 1 2?')).toThrow(new Error('Syntax error'))
   })
+
+  // not in the original Exercism
+  it('very complex operation', () => {
+    expect(answer('What is 12 divided by 2 divided by -3 plus 10 multiplied by 8?')).toEqual(64)
+  })
 })

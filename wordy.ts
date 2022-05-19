@@ -41,5 +41,18 @@ export const answer = (question: string): number => {
     return compute(firstNum, operand, operation as Operation)
   } else {
     // multiple operations
+    const initRes = compute(firstNum, operand, operation as Operation);
+    const pairs = rest.reduce((acc, curr, index, array) => {
+      if (index % 2 === 0) {
+        // @ts-ignore
+        acc.push(array.slice(index, index + 2));
+      }
+      return acc;
+    }, []);
+    // @ts-ignore
+    return pairs.reduce((acc: number, [operation, secondNum]) => {
+      const newTotal = compute(acc.toString(), secondNum, operation);
+      return newTotal;
+    }, initRes)
   }
 }
