@@ -5,9 +5,7 @@ enum Operation {
   division = 'dividedby',
 }
 
-const compute = (firstNum: string, secondNum: string, operation: Operation): number => {
-  const first = parseInt(firstNum, 10);
-  const second = parseInt(secondNum, 10);
+const compute = (first: number, second: number, operation: Operation): number => {
   switch (operation) {
     case Operation.addition:
       return first + second;
@@ -48,25 +46,17 @@ export const answer = (question: string): number => {
   if (!operand) throw new Error('Syntax error')
   if (isNaN(parseInt(operand, 10))) throw new Error('Syntax error')
 
-  // assume valid question structure from here on.
-  if (!rest.length) {
-    // there's only one operation
-    return compute(firstNum, operand, operation as Operation)
-  } else {
-    // multiple operations
-    const initRes = compute(firstNum, operand, operation as Operation);
-    const pairs = rest.reduce((acc, curr, index, array) => {
-      if (index % 2 === 0) {
-        if (!isValidOperation(curr)) throw new Error('Syntax error')
-        // @ts-ignore
-        acc.push(array.slice(index, index + 2));
-      }
-      return acc;
-    }, []);
-    // @ts-ignore
-    return pairs.reduce((acc: number, [operation, secondNum]) => {
-      const newTotal = compute(acc.toString(), secondNum, operation);
-      return newTotal;
-    }, initRes)
-  }
+  // assume valid question structure from here on except for the valid operation check in the reduce loop below
+  const pairs = [operation, operand, ...rest].reduce((acc, curr, index, array) => {
+    if (index % 2 === 0) {
+      if (!isValidOperation(curr)) throw new Error('Syntax error')
+      // @ts-ignore
+      acc.push(array.slice(index, index + 2));
+    }
+    return acc;
+  }, []);
+  // @ts-ignore
+  return pairs.reduce((acc: number, [operation, secondNum]) => {
+    return compute(acc, parseInt(secondNum, 10), operation);
+  }, parseInt(firstNum, 10))
 }
