@@ -16,7 +16,7 @@ const compute = (first: number, second: number, operation: Operation): number =>
     case Operation.division:
       return first / second;
     default:
-      throw new Error('Unknown operation');
+      throw new Error('Syntax error');
   }
 }
 
@@ -46,10 +46,8 @@ export const answer = (question: string): number => {
   if (!operand) throw new Error('Syntax error')
   if (isNaN(parseInt(operand, 10))) throw new Error('Syntax error')
 
-  // assume valid question structure from here on except for the valid operation check in the reduce loop below
   const pairs = [operation, operand, ...rest].reduce((acc, curr, index, array) => {
     if (index % 2 === 0) {
-      if (!isValidOperation(curr)) throw new Error('Syntax error')
       // @ts-ignore
       acc.push(array.slice(index, index + 2));
     }
